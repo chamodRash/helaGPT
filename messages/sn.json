@@ -1,0 +1,21 @@
+{
+  "dashboardNavbar": {
+    "languages": {
+      "title": "භාෂාව",
+      "caption": "භාෂාව තෝරන්න",
+      "english": "ඉංග්‍රීසි",
+      "sinhala": "සිංහල",
+      "tamil": "දෙමළ"
+    },
+    "themes": {
+      "light": "ලාබාල",
+      "dark": "දුඹුරු",
+      "default": "සාමාන්‍ය"
+    },
+    "userActions": {
+      "myAccount": "මගේ ගිණුම",
+      "settings": "සැකසුම්",
+      "signout": "ඉවත්වෙන්න"
+    }
+  }
+}

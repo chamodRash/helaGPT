@@ -1,0 +1,21 @@
+{
+  "dashboardNavbar": {
+    "languages": {
+      "title": "Language",
+      "caption": "Select Language",
+      "english": "English",
+      "sinhala": "Sinhala",
+      "tamil": "Tamil"
+    },
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "default": "Default"
+    },
+    "userActions": {
+      "myAccount": "My Account",
+      "settings": "Settings",
+      "signout": "Sign-out"
+    }
+  }
+}
