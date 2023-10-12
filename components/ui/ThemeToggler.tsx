@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function ThemeToggler() {
+export function ThemeToggler({ device }: { device: string }) {
   const { setTheme } = useTheme();
   const t = useTranslations("dashboardNavbar");
 
@@ -21,7 +21,9 @@ export function ThemeToggler() {
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="outline-none border-2 dark:bg-zinc-950 dark:border-black ">
+        className={`outline-none border-2 p-1 dark:bg-zinc-950 dark:border-black ${
+          device === "mobile" ? "flex md:hidden" : "hidden md:flex"
+        }`}>
         <Button variant="outline" size="icon">
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
