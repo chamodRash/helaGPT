@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next-intl/link";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
 import { FaUserAlt } from "react-icons/fa";
 import { FaUserGear } from "react-icons/fa6";
@@ -40,11 +41,20 @@ import {
 import DashboardSidebar from "./DashboardSidebar";
 
 export default function DashboardNavbar() {
-  const [position, setPosition] = React.useState("bottom");
+  const [position, setPosition] = useState("bottom");
   const t = useTranslations("dashboardNavbar");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
-    <div className="w-11/12 h-[8%] md:h-1/6 mx-auto flex items-center justify-between md:justify-end">
+    <div className="w-11/12 h-[8%] md:h-[12%] mx-auto flex items-center justify-between md:justify-end">
       <div className="md:hidden ml-1 w-52 flex items-center gap-4">
         <Sheet>
           <SheetTrigger>
