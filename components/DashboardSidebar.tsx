@@ -11,6 +11,8 @@ import CodeIcon from "../public/code_icon.svg";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const routes = [
   {
@@ -47,6 +49,7 @@ const routes = [
 
 export default function DashboardSidebar() {
   const [isMounted, setIsMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsMounted(true);
@@ -57,22 +60,29 @@ export default function DashboardSidebar() {
   }
 
   return (
-    <div className="h-full my-8 md:mx-5">
-      <Image
-        src={LogoWithText}
-        width={150}
-        height={150}
-        alt="Logo"
-        className="ml-3"
-      />
-      <div className="space-y-4 flex flex-col mt-10 ">
+    <div className="h-full my-3 md:mx-5">
+      <Link href={"/dashboard"} className="ml-3">
+        <Image src={LogoWithText} width={150} height={150} alt="Logo" />
+      </Link>
+      <div className="space-y-4 flex flex-col mt-8 ">
         {routes.map((route) => (
           <Link
             href={route.href}
             key={route.href}
-            className="flex items-center gap-5 rounded-full pl-5 hover:bg-slate-200 dark:hover:bg-zinc-900 cursor-pointer transition">
+            className={cn(
+              "flex items-center gap-5 rounded-full pl-5 hover:bg-slate-200 dark:hover:bg-zinc-900 cursor-pointer transition duration-500 ease-in-out",
+              pathname === route.href
+                ? "bg-slate-200 dark:bg-zinc-900"
+                : "text-zinc-300 dark:text-zinc-200"
+            )}>
             <Image src={route.icon} alt="message icon" width={20} height={20} />
-            <p className="py-2 pr-5 w-11/12 font-semibold text-zinc-800 dark:text-gray-200 hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-r hover:from-[#642B73] hover:to-[#C6426E] dark:hover:from-pink-500 dark:hover:to-violet-500 ">
+            <p
+              className={cn(
+                "py-2 pr-5 w-11/12 transition-all duration-500 ease-in-out ",
+                pathname === route.href
+                  ? "font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-[#642B73] to-[#C6426E] dark:from-pink-500 dark:to-violet-500"
+                  : "font-semibold tracking-wider hover:font-bold hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-r hover:from-[#642B73] hover:to-[#C6426E] dark:hover:from-pink-500 dark:hover:to-violet-500 "
+              )}>
               {route.label}
             </p>
           </Link>
