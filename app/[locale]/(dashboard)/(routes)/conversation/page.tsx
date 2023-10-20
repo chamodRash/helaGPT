@@ -69,22 +69,22 @@ const ConversationPage = () => {
         iconColor="text-zinc-900 dark:text-zinc-50"
         bgColor="bg-zinc-200 dark:bg-zinc-800"
       />
-      <div className="h-[92%] md:h-[88%] grid grid-rows-6 relative">
-        <div className="row-start-1 row-span-5 h-full overflow-y-scroll ">
+      <div className="h-[92%] md:h-[88%] grid grid-rows-5 lg:grid-rows-6 relative">
+        <div className="row-start-1 row-span-4 lg:row-span-5 h-full overflow-y-scroll ">
           {isLoading && (
-            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 p-8 rounded-3xl w-10/12 mx-auto flex items-center justify-center bg-zinc-700 z-10">
+            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 p-8 rounded-3xl w-11/12 lg:w-10/12 mx-auto flex items-center justify-center bg-zinc-700 z-10">
               <Loader />
             </div>
           )}
           {messages.length === 0 && !isLoading && (
             <Empty label="No conversation found" />
           )}
-          <div className="w-10/12 mx-auto flex flex-col justify-end">
+          <div className="w-11/12 lg:w-10/12 mx-auto flex flex-col justify-end">
             {messages.map((message) => (
               <div
                 key={message.content}
                 className={cn(
-                  "px-8 py-6 my-1 w-full items-center gap-x-5 rounded-lg flex",
+                  "px-4 lg:px-8 py-6 my-1 w-full items-center gap-x-3 lg:gap-x-5 rounded-lg flex",
                   message.role === "user" ? "bg-transparent" : "bg-zinc-800"
                 )}>
                 {message.role === "user" ? <UserAvatar /> : <AiAvatar />}
@@ -93,11 +93,11 @@ const ConversationPage = () => {
             ))}
           </div>
         </div>
-        <div className="row-start-6 h-full">
+        <div className="h-full ">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-11/12 h-16 -mt-4 md:mt-1 md:mb-0 mx-auto flex items-center justify-between dark:bg-zinc-800 rounded-full border border-zinc-500 dark:border-zinc-950">
+              className="w-11/12 lg:w-10/12 h-16 lg:mt-1 md:mb-0 mx-auto flex items-center justify-between dark:bg-zinc-800 rounded-full border border-zinc-500 dark:border-zinc-950">
               <FormField
                 name="prompt"
                 render={({ field }) => (
