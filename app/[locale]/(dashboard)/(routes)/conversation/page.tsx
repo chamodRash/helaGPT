@@ -2,10 +2,12 @@
 
 import * as z from "zod";
 import axios from "axios";
+import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 import { formSchema } from "./constant";
 import { MessagesSquare, Send } from "lucide-react";
@@ -13,7 +15,10 @@ import Heading from "@/components/Heading";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import Empty from "@/components/Empty";
+import { Loader } from "@/components/Loader";
+import UserAvatar from "@/components/UserAvatar";
+import AiAvatar from "@/components/AiAvatar";
 
 const ConversationPage = () => {
   const router = useRouter();
@@ -28,6 +33,10 @@ const ConversationPage = () => {
 
   const isLoading = form.formState.isSubmitting;
 
+  const config = {
+    headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const userMessage: ChatCompletionMessageParam = {
@@ -35,14 +44,13 @@ const ConversationPage = () => {
         content: values.prompt,
       };
 
-      const newMessage = [...messages];
+      const newMessages = [...messages, userMessage];
 
-      const response = await axios.post("@/app/[locale]/api/conversation", {
-        messages: newMessage,
+      const response = await axios.post("/api/conversation", {
+        messages: newMessages,
       });
 
       setMessages((current) => [...current, userMessage, response.data]);
-
       form.reset();
     } catch (error: any) {
       // TODO: open Pro Modal
@@ -61,11 +69,27 @@ const ConversationPage = () => {
         iconColor="text-zinc-900 dark:text-zinc-50"
         bgColor="bg-zinc-200 dark:bg-zinc-800"
       />
-      <div className="h-[92%] md:h-[88%] grid grid-rows-6">
-        <div className="row-start-1 row-span-5 h-full">
-          <div>
+      <div className="h-[92%] md:h-[88%] grid grid-rows-6 relative">
+        <div className="row-start-1 row-span-5 h-full overflow-y-scroll ">
+          {isLoading && (
+            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 p-8 rounded-3xl w-10/12 mx-auto flex items-center justify-center bg-zinc-700 z-10">
+              <Loader />
+            </div>
+          )}
+          {messages.length === 0 && !isLoading && (
+            <Empty label="No conversation found" />
+          )}
+          <div className="w-10/12 mx-auto flex flex-col justify-end">
             {messages.map((message) => (
-              <div key={message.content}>{message.content}</div>
+              <div
+                key={message.content}
+                className={cn(
+                  "px-8 py-6 my-1 w-full items-center gap-x-5 rounded-lg flex",
+                  message.role === "user" ? "bg-transparent" : "bg-zinc-800"
+                )}>
+                {message.role === "user" ? <UserAvatar /> : <AiAvatar />}
+                <p className="text-sm">{message.content}</p>
+              </div>
             ))}
           </div>
         </div>

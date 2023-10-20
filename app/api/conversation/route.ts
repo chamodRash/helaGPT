@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // This is also the default, can be omitted
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 export async function POST(req: Request) {
@@ -11,11 +11,13 @@ export async function POST(req: Request) {
     const { messages } = body;
 
     if (!openai.apiKey) {
-      return new NextResponse("OpenAi API Key not configured", { status: 500 });
+      return new NextResponse("OpenAi API Key not configured", {
+        status: 500,
+      });
     }
 
     if (!messages) {
-      return new NextResponse("Messages are rrequired", { status: 400 });
+      return new NextResponse("Messages are required", { status: 400 });
     }
 
     const response = await openai.chat.completions.create({
