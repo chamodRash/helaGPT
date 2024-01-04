@@ -26,7 +26,7 @@ export default function DashboardPage() {
           wrapper="span"
           cursor={true}
           repeat={Infinity}
-          className="text-zinc-900 dark:text-zinc-50 text-xl font-bold tracking-wide mt-16"
+          className="text-zinc-900 dark:text-zinc-50 text-xl font-bold tracking-wide mt-16 px-10"
         />
       </div>
     </div>

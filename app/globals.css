@@ -80,3 +80,23 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.75em;
+}
+::-webkit-scrollbar-track {
+  border-radius: 99em;
+  background-color: transparent;
+  margin-block: 0.5em;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 99em;
+  background-color: rgb(190, 190, 190);
+}
+
+@supports (scrollbar-color: rgb(97, 97, 97) rgb(190, 190, 190)) {
+  * {
+    scrollbar-width: thin;
+  }
+}

@@ -8,10 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
-// import { animateScroll } from "react-scroll";
+import ReactMarkdown from "react-markdown";
 
 import { formSchema } from "./constant";
-import { MessagesSquare, Send } from "lucide-react";
+import { Code, Send } from "lucide-react";
 import Heading from "@/components/Heading";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -21,7 +21,7 @@ import { Loader } from "@/components/Loader";
 import UserAvatar from "@/components/UserAvatar";
 import AiAvatar from "@/components/AiAvatar";
 
-const ConversationPage = () => {
+const CodePage = () => {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
 
@@ -47,7 +47,7 @@ const ConversationPage = () => {
 
       const newMessages = [...messages, userMessage];
 
-      const response = await axios.post("/api/conversation", {
+      const response = await axios.post("/api/code", {
         messages: newMessages,
       });
 
@@ -73,9 +73,9 @@ const ConversationPage = () => {
   return (
     <div className="relative h-screen w-full">
       <Heading
-        title="Conversation"
-        description="Meet your new personal tutor"
-        icon={MessagesSquare}
+        title="Code Generation"
+        description="Meet your new code buddy"
+        icon={Code}
         iconColor="text-zinc-900 dark:text-zinc-50"
         bgColor="bg-zinc-200 dark:bg-zinc-800"
       />
@@ -98,7 +98,23 @@ const ConversationPage = () => {
                   message.role === "user" ? "bg-transparent" : "bg-zinc-800"
                 )}>
                 {message.role === "user" ? <UserAvatar /> : <AiAvatar />}
-                <p className="text-sm">{message.content}</p>
+                <ReactMarkdown
+                  components={{
+                    pre: ({ node, ...props }) => (
+                      <div className="overflow-auto w-full my-5 bg-gray-100 dark:bg-black/20 p-2 rounded-lg">
+                        <pre {...props} />
+                      </div>
+                    ),
+                    code: ({ node, ...props }) => (
+                      <code
+                        className="dark:bg-black/30 rounded-md p-0.5 px-2"
+                        {...props}
+                      />
+                    ),
+                  }}
+                  className="text-sm">
+                  {message.content || ""}
+                </ReactMarkdown>
               </div>
             ))}
           </div>
@@ -138,4 +154,4 @@ const ConversationPage = () => {
   );
 };
 
-export default ConversationPage;
+export default CodePage;
