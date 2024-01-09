@@ -68,6 +68,8 @@ const CodePage = () => {
     } finally {
       router.refresh();
     }
+
+    return false;
   };
 
   return (
