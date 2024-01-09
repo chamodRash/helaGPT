@@ -52,21 +52,11 @@ const CodePage = () => {
       });
 
       setMessages((current) => [...current, userMessage, response.data]);
-
-      const options = {
-        // Your options here, for example:
-        duration: 500,
-        smooth: true,
-      };
-
-      // animateScroll.scrollToBottom(options);
-
-      form.reset();
     } catch (error: any) {
       // TODO: open Pro Modal
       console.log(`error`, error);
     } finally {
-      router.refresh();
+      form.reset();
     }
 
     return false;

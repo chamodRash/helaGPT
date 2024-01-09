@@ -75,7 +75,6 @@ const ImagePage = () => {
       console.log(`error`, error);
     } finally {
       form.reset();
-      router.refresh();
     }
 
     return false;
