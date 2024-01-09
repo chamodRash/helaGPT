@@ -90,15 +90,19 @@ const ConversationPage = () => {
             <Empty label="No conversation found" />
           )}
           <div className="w-11/12 lg:w-10/12 mx-auto flex flex-col justify-end">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <div
-                key={message.content}
+                key={index}
                 className={cn(
                   "px-4 lg:px-8 py-6 my-1 w-full items-center gap-x-3 lg:gap-x-5 rounded-2xl flex",
                   message.role === "user" ? "bg-transparent" : "bg-zinc-800"
                 )}>
                 {message.role === "user" ? <UserAvatar /> : <AiAvatar />}
-                <p className="text-sm">{message.content}</p>
+                <p className="text-sm">
+                  {Array.isArray(message.content)
+                    ? message.content.map((part) => part).join("")
+                    : message.content || ""}
+                </p>
               </div>
             ))}
           </div>
