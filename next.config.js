@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  api: {
-    bodyParser: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "oaidalleapiprodscus.blob.core.windows.net",
+      },
+    ],
   },
 };
 
@@ -10,15 +15,10 @@ const withNextIntl = require("next-intl/plugin")(
   "./i18n.ts"
 );
 
-module.exports = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "oaidalleapiprodscus.blob.core.windows.net",
-        port: "",
-        pathname: "",
-      },
-    ],
-  },
-};
+// module.exports = withNextIntl({
+//   nextConfig,
+//   api: {
+//     bodyParser: true,
+//   },
+// });
+module.exports = nextConfig;

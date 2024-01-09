@@ -10,8 +10,6 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { prompt, amount = 1, resolution = "512x512" } = body;
 
-    console.log(`inputs`, prompt, amount, resolution);
-
     if (!openai.apiKey) {
       return new NextResponse("OpenAi API Key not configured", {
         status: 500,
@@ -35,8 +33,8 @@ export async function POST(req: Request) {
       n: parseInt(amount, 10),
       size: resolution,
     });
-    console.log(`response`, response);
-    return NextResponse.json(response.data.data);
+
+    return NextResponse.json(response.data);
   } catch (error) {
     console.log(`[IMAGE_ERROR]`, error);
     return new NextResponse("Internal error", { status: 500 });

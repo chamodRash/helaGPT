@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 import { amountOptions, resolutionOptions, formSchema } from "./constant";
@@ -27,10 +27,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardFooter } from "@/components/ui/card";
+import UserAvatar from "@/components/UserAvatar";
+import AiAvatar from "@/components/AiAvatar";
 
 const ImagePage = () => {
   const router = useRouter();
-  const [images, setImages] = useState<string[]>([]);
+  // const [images, setImages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  interface Message {
+    prompt: string;
+    resolution: string;
+    amount: string;
+    generatedImages: string[];
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,25 +53,28 @@ const ImagePage = () => {
 
   const isLoading = form.formState.isSubmitting;
 
-  const config = {
-    headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-  };
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setImages([]);
+      const res = await axios.post("/api/image", values);
+      console.log("Response:", res); // Log the entire response
 
-      const response = await axios.post("/api/image", values);
+      const imageUrls = res.data.map((image: { url: string }) => image.url);
 
-      const urls = response.data.map((image: { url: string }) => image.url);
+      // setImages(imageUrls);
 
-      setImages(urls);
+      const message: Message = {
+        prompt: values.prompt,
+        resolution: values.resolution,
+        amount: values.amount,
+        generatedImages: imageUrls,
+      };
 
-      form.reset();
-    } catch (error: any) {
+      setMessages((oldMessages) => [...oldMessages, message]);
+    } catch (error) {
       // TODO: open Pro Modal
       console.log(`error`, error);
     } finally {
+      form.reset();
       router.refresh();
     }
   };
@@ -82,25 +95,40 @@ const ImagePage = () => {
               <Loader />
             </div>
           )}
-          {images.length === 0 && !isLoading && (
+          {messages.length === 0 && !isLoading && (
             <Empty label="No images generated" />
           )}
-          <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
-            {images.map((image) => (
-              <Card key={image} className="rounded-lg overflow-hidden">
-                <div className="relative aspect-square">
-                  <Image alt="Image" fill src={image} />
+          <div className="w-11/12 lg:w-10/12 mx-auto ">
+            {messages.map((message, index) => (
+              <div key={index}>
+                <div className="px-4 lg:px-8 py-6 my-1 w-full items-center gap-x-3 lg:gap-x-5 rounded-2xl flex bg-transparent">
+                  <UserAvatar />
+                  {message.prompt}
                 </div>
-                <CardFooter className="p-2">
-                  <Button
-                    onClick={() => window.open(image)}
-                    variant="secondary"
-                    className="w-full">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download
-                  </Button>
-                </CardFooter>
-              </Card>
+                <div className="px-4 lg:px-8 pt-10 pb-6 my-1 w-full grid grid-cols-[5%_95%] gap-x-2 rounded-2xl bg-zinc-800 overflow-x-hidden">
+                  <AiAvatar />
+                  <div className="w-full grid grid-cols-fluid gap-5">
+                    {message.generatedImages.map((image, index) => (
+                      <Card
+                        key={index}
+                        className="w-48 rounded-lg overflow-hidden">
+                        <div className="relative aspect-square">
+                          <Image key={index} alt="Image" fill src={image} />
+                        </div>
+                        <CardFooter className="p-2">
+                          <Button
+                            onClick={() => window.open(image)}
+                            variant="secondary"
+                            className="w-full">
+                            <Download className="h-4 w-4 mr-2" />
+                            Download
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>

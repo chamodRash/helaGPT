@@ -90,9 +90,9 @@ const CodePage = () => {
             <Empty label="No conversation found" />
           )}
           <div className="w-11/12 lg:w-10/12 mx-auto flex flex-col justify-end">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <div
-                key={message.role + (Math.random() * 10).toString(36)}
+                key={index}
                 className={cn(
                   "px-4 lg:px-8 py-6 my-1 w-full items-center gap-x-3 lg:gap-x-5 rounded-2xl flex",
                   message.role === "user" ? "bg-transparent" : "bg-zinc-800"
