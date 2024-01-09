@@ -77,6 +77,8 @@ const ImagePage = () => {
       form.reset();
       router.refresh();
     }
+
+    return false;
   };
 
   return (

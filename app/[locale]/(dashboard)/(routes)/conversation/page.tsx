@@ -68,6 +68,8 @@ const ConversationPage = () => {
     } finally {
       router.refresh();
     }
+
+    return false;
   };
 
   return (
